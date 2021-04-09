@@ -1,0 +1,25 @@
+import serial     # using serial library
+import datetime   # using date time library
+import urllib3    # using URL library
+ser = serial.Serial("/dev/cu.usbmodem14401",9600)
+
+ser.flushInput()
+baseURL= 'https://api.thingspeak.com/update?api_key='
+API_key= 'OW1HI157H254HQHV' # use your own Write API
+ID = 'M00736335' # use your own MISIS
+while True:
+    try:
+        ser_bytes= ser.readline()# read one line from serial port# and grab the data
+        decoded_bytes= ser_bytes[0:len(ser_bytes)-2].decode("utf-8")
+        now = datetime.datetime.now()# create timestamp
+        now = now.strftime("%Y-%m-%d %H:%M:%S")# put on readable format
+        data = ( "'{}’,’{}’,{}\r\n".format(now,ID,decoded_bytes) )# prepare data to print
+        print(data)# display it on screen
+# preparing URL request with Write API and data
+        tsURL= ( "{}{}&field1='{}'&field2={}".format(baseURL,API_key,ID,decoded_bytes))
+        http = urllib3.PoolManager()# sending HTTP request to Thingspeak
+        tspeak= http.request("GET", tsURL)# getting the status
+        tspeak.status
+    except:
+            print("Keyboard Interrupt")# keep looping until user press CTRL-C
+            breaK
