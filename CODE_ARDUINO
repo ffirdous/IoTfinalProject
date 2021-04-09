@@ -13,7 +13,7 @@ void loop() {
   digitalWrite(outputPin, LOW);           //TRIG pin is in Low state
   int distance = pulseIn(inputPin, HIGH); // Read receiver pulse time 
   distance= distance/58;                  // Transform pulse time to distance 
-  Serial.println(distance);               //Output distance
+  Serial.println(distance);               //Output of distance
   delay(10000);                           //Delay of 10 seconds
   
  }
